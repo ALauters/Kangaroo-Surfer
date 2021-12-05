@@ -19,4 +19,5 @@ sudo apt-get install python-dev
 # alsaaudio install
 pip install pyalsaaudio
 
-
+# rpi gpio install
+CFLAGS="-fcommon" pip install rpi.gpio

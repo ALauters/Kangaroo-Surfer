@@ -54,9 +54,9 @@ def main():
     print(filename)
 
     if(os.path.exists(filename)):
-	music_file = wave.open(filename, 'rb')
+        music_file = wave.open(filename, 'rb')
 
-    	play(device, music_file)
+        play(device, music_file)
 
 
     GPIO.cleanup()

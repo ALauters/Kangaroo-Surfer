@@ -50,11 +50,14 @@ def main():
 
     device = 'default'
     # Open the music file (needs to be .wav format)
-    filename = os.path.join('Desktop', 'Kangaroo-Surfer', 'BackInBlack.wav')
+    filename = os.path.join(os.getcwd(), 'BackInBlack.wav')
     print(filename)
-    music_file = wave.open(filename, 'rb')
 
-    play(device, music_file)
+    if(os.path.exists(filename)):
+	music_file = wave.open(filename, 'rb')
+
+    	play(device, music_file)
+
 
     GPIO.cleanup()
 

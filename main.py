@@ -8,9 +8,9 @@ def main():
     GPIO.setup(led, GPIO.OUT)
 
     for i in range(1,5):
-        GPIO.setmode(led, GPIO.HIGH)
+        GPIO.output(led, GPIO.HIGH)
         time.sleep(5)
-        GPIO.setmode(led, GPIO.LOW)
+        GPIO.output(led, GPIO.LOW)
         time.sleep(5)
 
     GPIO.cleanup()
@@ -18,3 +18,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

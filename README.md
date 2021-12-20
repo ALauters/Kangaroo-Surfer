@@ -2,7 +2,7 @@
 this is a nightmare so far
 https://www.waveshare.com/w/upload/5/54/WM8960_Audio_HAT_User_Manual_EN.pdf
 # NOTE: the driver you want depends on kernel verssion
-# I used a version of debeian stretch that kad kernel 4.19
+I used a version of debeian stretch that kad kernel 4.19
 
 # any version less than 5 use this
 git clone -b rpi-4.9.y https://github.com/waveshare/WM8960-Audio-HAT.git

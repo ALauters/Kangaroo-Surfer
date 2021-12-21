@@ -48,18 +48,22 @@ def grabScores():
 
     for event in data['events']:
        if 'Kent State' in event['name'] and (event['competitions'][0]['status']['type']['completed'] == False):
-           pp.pprint(event)
-           id = event['id']
+           for competition in event['competitions']:
+               for competitor in competition['competitors']:
+                   if '2309' in competitor['team']['id']:
+#                       pp.pprint(competitor['score'])
+			return competitor['score'])
 
-
+    #if there is no game this week or not playing return 0
+    return 0
 
 
 
 def main():
     # sets board up to use gpio numbers
-#    GPIO.setmode(GPIO.BCM)
-#    led = 26
-#    GPIO.setup(led, GPIO.OUT)
+    GPIO.setmode(GPIO.BCM)
+    led = 26
+    GPIO.setup(led, GPIO.OUT)
 
 #    for i in range(1, 2):
 #        GPIO.output(led, GPIO.HIGH)
@@ -67,22 +71,29 @@ def main():
 #        GPIO.output(led, GPIO.LOW)
 #        time.sleep(5)
 
-#    device = 'default'
+    device = 'default'
     # Open the music file (needs to be .wav format)
 #    filename = os.path.join(os.getcwd(), 'BackInBlack.wav')
-#    print(filename)
+    filename = os.path.join(os.getcwd(), 'Tada.wav')
+    if(os.path.exists(filename)):
+        music_file = wave.open(filename, 'rb')
 
-#    if(os.path.exists(filename)):
-#        music_file = wave.open(filename, 'rb')
+    score = grabScores()
 
-#        play(device, music_file)
+    while(True):
+        newScore = grabScores()
+
+        if newScore > score:
+            play(device, music_file)
+            score = newscore
+            print('the new score for kent state is {}'.format(score))
+
+        time.sleep(1)
+    #end while
 
 
-#    GPIO.cleanup()
-
-    grabScores()
+    GPIO.cleanup()
 
 
 if __name__ == "__main__":
     main()
-

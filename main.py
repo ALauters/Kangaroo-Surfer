@@ -4,8 +4,10 @@ import os
 import sys
 import wave
 import getopt
+import requests
 import alsaaudio
 
+import pprint
 
 def play(device, f):
     print('%d channels, %d sampling rate\n' % (f.getnchannels(),
@@ -36,30 +38,49 @@ def play(device, f):
         data = f.readframes(periodsize)
 
 
+def grabScores():
+    pp = pprint.PrettyPrinter(indent=2)
+
+    url =  'https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard'
+    r = requests.get(url)
+
+    data = r.json()
+
+    for event in data['events']:
+       if 'Kent State' in event['name'] and (event['competitions'][0]['status']['type']['completed'] == False):
+           pp.pprint(event)
+           id = event['id']
+
+
+
+
+
 def main():
     # sets board up to use gpio numbers
-    GPIO.setmode(GPIO.BCM)
-    led = 26
-    GPIO.setup(led, GPIO.OUT)
+#    GPIO.setmode(GPIO.BCM)
+#    led = 26
+#    GPIO.setup(led, GPIO.OUT)
 
-    for i in range(1, 2):
-        GPIO.output(led, GPIO.HIGH)
-        time.sleep(5)
-        GPIO.output(led, GPIO.LOW)
-        time.sleep(5)
+#    for i in range(1, 2):
+#        GPIO.output(led, GPIO.HIGH)
+#        time.sleep(5)
+#        GPIO.output(led, GPIO.LOW)
+#        time.sleep(5)
 
-    device = 'default'
+#    device = 'default'
     # Open the music file (needs to be .wav format)
-    filename = os.path.join(os.getcwd(), 'BackInBlack.wav')
-    print(filename)
+#    filename = os.path.join(os.getcwd(), 'BackInBlack.wav')
+#    print(filename)
 
-    if(os.path.exists(filename)):
-        music_file = wave.open(filename, 'rb')
+#    if(os.path.exists(filename)):
+#        music_file = wave.open(filename, 'rb')
 
-        play(device, music_file)
+#        play(device, music_file)
 
 
-    GPIO.cleanup()
+#    GPIO.cleanup()
+
+    grabScores()
 
 
 if __name__ == "__main__":

@@ -47,12 +47,13 @@ def grabScores():
     data = r.json()
 
     for event in data['events']:
-       if 'Kent State' in event['name'] and (event['competitions'][0]['status']['type']['completed'] == False):
+       if 'UTSA' in event['name'] and (event['competitions'][0]['status']['type']['completed'] == False):
            for competition in event['competitions']:
                for competitor in competition['competitors']:
-                   if '2309' in competitor['team']['id']:
+                   if '2636' in competitor['team']['id']:
 #                       pp.pprint(competitor['score'])
-			return competitor['score'])
+			#print competitor['score']
+			return int(competitor['score'])
 
     #if there is no game this week or not playing return 0
     return 0
@@ -75,18 +76,22 @@ def main():
     # Open the music file (needs to be .wav format)
 #    filename = os.path.join(os.getcwd(), 'BackInBlack.wav')
     filename = os.path.join(os.getcwd(), 'Tada.wav')
-    if(os.path.exists(filename)):
-        music_file = wave.open(filename, 'rb')
 
     score = grabScores()
-
+    newscore = 0
     while(True):
         newScore = grabScores()
 
         if newScore > score:
+            if(os.path.exists(filename)):
+                music_file = wave.open(filename, 'rb')
+
+            print('newScore is {} the old score is'.format(newScore, score))
             play(device, music_file)
             score = newscore
             print('the new score for kent state is {}'.format(score))
+
+            music_file.close()
 
         time.sleep(1)
     #end while

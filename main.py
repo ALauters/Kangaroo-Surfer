@@ -46,8 +46,9 @@ def grabScores(url):
     data = r.json()
 
     for event in data['events']:
-       # replace with IOWA
-       if 'ARMY' in event['name'] and (event['competitions'][0]['status']['type']['completed'] == False):
+       # replace with Iowa or something, this is case sensitive for now
+       # I could make it lowercase it to be multi use
+       if 'Army' in event['name'] and (event['competitions'][0]['status']['type']['completed'] == False):
            for competition in event['competitions']:
                for competitor in competition['competitors']:
                    # Iowa team id is 2294
@@ -84,7 +85,7 @@ def checkGameCompleted(url, gameId):
     for event in data['events']:
         if gameId in event['id']:
             # debug code
-            print('game completed? {}'.format(event['competitions'][0]['status']['type']['completed'])
+            print('game completed? {}'.format(event['competitions'][0]['status']['type']['completed']))
             ##############
 
             # have to typecast to a bool since the json returna a string
@@ -124,7 +125,7 @@ def main():
         if gameId != 0:
             gameCompleted = checkGameCompleted(url, gameId)
 
-        while not (gameCompleted)
+        while not (gameCompleted):
             newScore = grabScores(url)
 
             if newScore > score:

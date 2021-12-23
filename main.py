@@ -38,26 +38,61 @@ def play(device, f):
         data = f.readframes(periodsize)
 
 
-def grabScores():
+def grabScores(url):
     pp = pprint.PrettyPrinter(indent=2)
 
-    url =  'https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard'
     r = requests.get(url)
 
     data = r.json()
 
     for event in data['events']:
-       if 'UTSA' in event['name'] and (event['competitions'][0]['status']['type']['completed'] == False):
+       # replace with IOWA
+       if 'ARMY' in event['name'] and (event['competitions'][0]['status']['type']['completed'] == False):
            for competition in event['competitions']:
                for competitor in competition['competitors']:
-                   if '2636' in competitor['team']['id']:
-#                       pp.pprint(competitor['score'])
-			#print competitor['score']
-			return int(competitor['score'])
+                   # Iowa team id is 2294
+                   if '349' in competitor['team']['id']:
+                        #print competitor['score']
+                        return int(competitor['score'])
 
     #if there is no game this week or not playing return 0
     return 0
 
+
+def getGameId(url):
+
+    r = requests.get(url)
+    data = r.json()
+
+    for event in data['events']:
+       # replace with IOWA
+       if 'ARMY' in event['name'] and not (bool(distutils.util.strtobool(event['competitions'][0]['status']['type']['completed']))):
+           #debug code
+           print(evnt['id'])
+           ################
+           return event['id']
+
+    # If there is no game that matches it in the json file then return 0
+    return 0
+
+
+
+def checkGameCompleted(url, gameId):
+    r = requests.get(url)
+    data = r.json()
+
+    for event in data['events']:
+        if gameId in event['id']:
+            # debug code
+            print('game completed? {}'.format(event['competitions'][0]['status']['type']['completed'])
+            ##############
+
+            # have to typecast to a bool since the json returna a string
+            gameCompleted = (bool(distutils.util.strtobool(event['competitions'][0]['status']['type']['completed'])))
+            return gameCompleted
+
+    # if for saome reason it cant find a game I want it to return default true so it will skip over searching for things constantly
+    return True
 
 
 def main():
@@ -77,26 +112,42 @@ def main():
 #    filename = os.path.join(os.getcwd(), 'BackInBlack.wav')
     filename = os.path.join(os.getcwd(), 'Tada.wav')
 
-    score = grabScores()
+    # this is only for college football, no other sports are here
+    url = 'https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard'
+    score = grabScores(url)
     newscore = 0
+    gameCompleted = True
+
     while(True):
-        newScore = grabScores()
 
-        if newScore > score:
-            if(os.path.exists(filename)):
-                music_file = wave.open(filename, 'rb')
+        gameId = getGameId(url)
+        if gameId != 0:
+            gameCompleted = checkGameCompleted(url, gameId)
 
-            print('newScore is {} the old score is'.format(newScore, score))
-            play(device, music_file)
-            score = newscore
-            print('the new score for kent state is {}'.format(score))
+        while not (gameCompleted)
+            newScore = grabScores(url)
 
-            music_file.close()
+            if newScore > score:
+                if(os.path.exists(filename)):
+                    music_file = wave.open(filename, 'rb')
 
-        time.sleep(1)
-    #end while
+                print('newScore is {} the old score is'.format(newScore, score))
+                play(device, music_file)
+                score = newscore
+                print('the new score for kent state is {}'.format(score))
 
+                music_file.close()
 
+            gameCompleted = checkGameCompleted(url)
+
+            time.sleep(1)
+        #end while(!gameCompleted)
+
+        # if we cant find a game then we dont need to query every second
+        time.sleep(300)
+    # end wehile(True)
+
+    # it never gets here but its nice to have
     GPIO.cleanup()
 
 

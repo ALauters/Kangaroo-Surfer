@@ -12,14 +12,6 @@ from distutils import util
 import pprint
 
 
-# It pains me to make thing but IO couldnt get distutils to work. it complained about string.oy not being ablt to call .lower()
-def stringToBool(string):
-    if string == ('true'):
-        return True
-    else:
-        return False
-
-
 def play(device, f):
     print('%d channels, %d sampling rate\n' % (f.getnchannels(),
                                                f.getframerate()))
@@ -79,7 +71,7 @@ def getGameId(url):
     for event in data['events']:
        # replace with IOWA
 #       if 'Army' in event['name'] and not (bool(distutils.util.strtobool(event['competitions'][0]['status']['type']['completed']))):
-       if 'Army' in event['name'] and not stringToBool(event['competitions'][0]['status']['type']['completed']):
+       if 'Army' in event['name'] and not (event['competitions'][0]['status']['type']['completed']):
 
            #debug code
            print('event id is {}'.format(event['id']))
@@ -101,9 +93,7 @@ def checkGameCompleted(url, gameId):
             #print('game completed? {}'.format(event['competitions'][0]['status']['type']['completed']))
             ##############
 
-            # have to typecast to a bool since the json returna a string
-#            gameCompleted = (bool(distutils.util.strtobool(event['competitions'][0]['status']['type']['completed'])))
-            gameCompleted = stringToBool(event['competitions'][0]['status']['type']['completed'])
+            gameCompleted = event['competitions'][0]['status']['type']['completed']
             return gameCompleted
 
     # if for saome reason it cant find a game I want it to return default true so it will skip over searching for things constantly

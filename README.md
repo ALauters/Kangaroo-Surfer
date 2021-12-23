@@ -28,7 +28,10 @@ sudo apt-get install libasound2-dev
 pip install pyalsaaudio
 
 # rpi gpio install
-pip install rpi.gpio
+sudo CFLAGS="-fcommon" pip install RPi.GPIO
+
+# requests install
+pip install requests
 
 # testing code 
 https://www.waveshare.com/wiki/File:WM8960_Audio_HAT_Code.tar.gz

@@ -18,9 +18,6 @@ sudo apt install curl
 curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
 sudo python2 get-pip.py
 
-# BS4 for python 2.7
-pip install beautifulsoup4==4.9.3
-
 # install this thing
 sudo apt-get install python-dev
 

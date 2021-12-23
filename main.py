@@ -6,8 +6,19 @@ import wave
 import getopt
 import requests
 import alsaaudio
+import distutils
+from distutils import util
 
 import pprint
+
+
+# It pains me to make thing but IO couldnt get distutils to work. it complained about string.oy not being ablt to call .lower()
+def stringToBool(string):
+    if string == ('true'):
+        return True
+    else:
+        return False
+
 
 def play(device, f):
     print('%d channels, %d sampling rate\n' % (f.getnchannels(),
@@ -67,9 +78,11 @@ def getGameId(url):
 
     for event in data['events']:
        # replace with IOWA
-       if 'ARMY' in event['name'] and not (bool(distutils.util.strtobool(event['competitions'][0]['status']['type']['completed']))):
+#       if 'Army' in event['name'] and not (bool(distutils.util.strtobool(event['competitions'][0]['status']['type']['completed']))):
+       if 'Army' in event['name'] and not stringToBool(event['competitions'][0]['status']['type']['completed']):
+
            #debug code
-           print(evnt['id'])
+           print('event id is {}'.format(event['id']))
            ################
            return event['id']
 
@@ -85,11 +98,12 @@ def checkGameCompleted(url, gameId):
     for event in data['events']:
         if gameId in event['id']:
             # debug code
-            print('game completed? {}'.format(event['competitions'][0]['status']['type']['completed']))
+            #print('game completed? {}'.format(event['competitions'][0]['status']['type']['completed']))
             ##############
 
             # have to typecast to a bool since the json returna a string
-            gameCompleted = (bool(distutils.util.strtobool(event['competitions'][0]['status']['type']['completed'])))
+#            gameCompleted = (bool(distutils.util.strtobool(event['competitions'][0]['status']['type']['completed'])))
+            gameCompleted = stringToBool(event['competitions'][0]['status']['type']['completed'])
             return gameCompleted
 
     # if for saome reason it cant find a game I want it to return default true so it will skip over searching for things constantly
@@ -134,12 +148,12 @@ def main():
 
                 print('newScore is {} the old score is'.format(newScore, score))
                 play(device, music_file)
-                score = newscore
+                score = newScore
                 print('the new score for kent state is {}'.format(score))
 
                 music_file.close()
 
-            gameCompleted = checkGameCompleted(url)
+            gameCompleted = checkGameCompleted(url, gameId)
 
             time.sleep(1)
         #end while(!gameCompleted)

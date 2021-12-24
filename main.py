@@ -44,9 +44,11 @@ def play(device, f):
 def grabScores(url):
     pp = pprint.PrettyPrinter(indent=2)
 
-    r = requests.get(url)
-
-    data = r.json()
+    try:
+        r = requests.get(url)
+        data = r.json()
+    except:
+        return 0
 
     for event in data['events']:
        # replace with Iowa or something, this is case sensitive for now
@@ -59,18 +61,20 @@ def grabScores(url):
                         #print competitor['score']
                         return int(competitor['score'])
 
-    #if there is no game this week or not playing return 0
+    # if there is no game this week or not playing return 0
     return 0
 
 
 def getGameId(url):
-
-    r = requests.get(url)
-    data = r.json()
+    try:
+        r = requests.get(url)
+        data = r.json()
+    except:
+        return 0
 
     for event in data['events']:
        # replace with IOWA
-#       if 'Army' in event['name'] and not (bool(distutils.util.strtobool(event['competitions'][0]['status']['type']['completed']))):
+       # if 'Army' in event['name'] and not (bool(distutils.util.strtobool(event['competitions'][0]['status']['type']['completed']))):
        if 'Army' in event['name'] and not (event['competitions'][0]['status']['type']['completed']):
 
            #debug code
@@ -84,8 +88,13 @@ def getGameId(url):
 
 
 def checkGameCompleted(url, gameId):
-    r = requests.get(url)
-    data = r.json()
+    try:
+        r = requests.get(url)
+        data = r.json()
+    except:
+        # returning false because it failed to get the game and I want to retry faster
+        return False
+
 
     for event in data['events']:
         if gameId in event['id']:

@@ -9,6 +9,9 @@ git clone -b rpi-4.9.y https://github.com/waveshare/WM8960-Audio-HAT.git
 # any version over 5 use this
 git clone https://github.com/waveshare/WM8960-Audio-HAT
 
+# AFTER YOU INSTALL THIS OPEN UP THE DESKTOP BY PLUGGING IT IN AND RIGHT CLICK THE VOLUME AT TOP THEN TURN OFF THE OTHER SOUND CARDS
+I DONT KNOW WHAT ELSE I COULD POSSIBLY DO BUT THIS WAS THE ONLY THING I FOUND THAT WORKED
+
 # install python 2.7
 https://www.how2shout.com/linux/how-to-install-python-2-7-on-ubuntu-20-04-lts/
 

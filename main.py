@@ -53,11 +53,11 @@ def grabScores(url):
     for event in data['events']:
        # replace with Iowa or something, this is case sensitive for now
        # I could make it lowercase it to be multi use
-       if 'Army' in event['name'] and (event['competitions'][0]['status']['type']['completed'] == False):
+       if 'Iowa' in event['name'] and (event['competitions'][0]['status']['type']['completed'] == False):
            for competition in event['competitions']:
                for competitor in competition['competitors']:
                    # Iowa team id is 2294
-                   if '349' in competitor['team']['id']:
+                   if '2294' in competitor['team']['id']:
                         #print competitor['score']
                         return int(competitor['score'])
 
@@ -74,11 +74,9 @@ def getGameId(url):
 
     for event in data['events']:
        # replace with IOWA
-       # if 'Army' in event['name'] and not (bool(distutils.util.strtobool(event['competitions'][0]['status']['type']['completed']))):
-       if 'Army' in event['name'] and not (event['competitions'][0]['status']['type']['completed']):
-
-           #debug code
-           print('event id is {}'.format(event['id']))
+       if 'Iowa' in event['name'] and not (event['competitions'][0]['status']['type']['completed']):
+           # debug code
+           # print('event id is {}'.format(event['id']))
            ################
            return event['id']
 
@@ -94,7 +92,6 @@ def checkGameCompleted(url, gameId):
     except:
         # returning false because it failed to get the game and I want to retry faster
         return False
-
 
     for event in data['events']:
         if gameId in event['id']:
@@ -124,12 +121,12 @@ def main():
     device = 'default'
     # Open the music file (needs to be .wav format)
 #    filename = os.path.join(os.getcwd(), 'BackInBlack.wav')
-    filename = os.path.join(os.getcwd(), 'Tada.wav')
+    filename = os.path.join(os.getcwd(), 'Iowa_Fight_Song.wav.wav')
 
     # this is only for college football, no other sports are here
     url = 'https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard'
     score = grabScores(url)
-    newscore = 0
+    newScore = 0
     gameCompleted = True
 
     while(True):

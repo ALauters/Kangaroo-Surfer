@@ -28,13 +28,22 @@ sudo apt-get install python-dev
 sudo apt-get install libasound2-dev
 
 # alsaaudio install
-pip install pyalsaaudio
+sudo -H pip install pyalsaaudio
 
 # rpi gpio install
 sudo CFLAGS="-fcommon" pip install RPi.GPIO
 
 # requests install
-pip install requests
+sudo -H pip install requests
 
 # testing code 
 https://www.waveshare.com/wiki/File:WM8960_Audio_HAT_Code.tar.gz
+
+# Once the code is on there you will want to make the app run on boot so do the following
+sudo crontab -e
+(if it asks for an editor use nano)
+at the very bottom add this
+@reboot python2 /home/pi/Desktop/Kangaroo-Surfer/main.py >/home/pi/logs/cronlog 2>&1
+
+this will run the python file on boot and will also send any logs to /home/pi/logs/cronlog
+so you can read logs if the app isnt working by doing cat /home/pi/logs/cronlog

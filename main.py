@@ -107,21 +107,19 @@ def checkGameCompleted(url, gameId):
 
 
 def main():
+    # Delay for a minute since the pi cant register the soundboard right away
+    time.sleep(60)
+
     # sets board up to use gpio numbers
     GPIO.setmode(GPIO.BCM)
     led = 26
     GPIO.setup(led, GPIO.OUT)
 
-#    for i in range(1, 2):
-#        GPIO.output(led, GPIO.HIGH)
-#        time.sleep(5)
-#        GPIO.output(led, GPIO.LOW)
-#        time.sleep(5)
-
-    device = 'default'
+    device = 'hw:CARD=wm8960soundcard,DEV=0'
     # Open the music file (needs to be .wav format)
-#    filename = os.path.join(os.getcwd(), 'BackInBlack.wav')
-    filename = os.path.join(os.getcwd(), 'Iowa_Fight_Song.wav.wav')
+    # filename = os.path.join(os.getcwd(), 'BackInBlack.wav')
+    filename = os.path.join('/home', 'pi', 'Desktop', 'Kangaroo-Surfer', 'Iowa_Fight_Song.wav.wav')
+    tada_file = os.path.join('/home', 'pi', 'Desktop', 'Kangaroo-Surfer', 'Tada.wav')
 
     # this is only for college football, no other sports are here
     url = 'https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard'
@@ -129,16 +127,24 @@ def main():
     newScore = 0
     gameCompleted = True
 
+    # Audio queue to show the app is running
+    tada_sound = wave.open(tada_file, 'rb')
+    play(device, tada_sound)
+    tada_sound.close()
+
     while(True):
 
         gameId = getGameId(url)
         if gameId != 0:
             gameCompleted = checkGameCompleted(url, gameId)
 
+        # ToDo: make it so it starts this loop like 10 min before game instead of whenever espn loads it on the json
         while not (gameCompleted):
             newScore = grabScores(url)
 
             if newScore > score:
+                # Turn lights on
+                GPIO.output(led, GPIO.HIGH)
                 if(os.path.exists(filename)):
                     music_file = wave.open(filename, 'rb')
 
@@ -147,7 +153,10 @@ def main():
                 score = newScore
                 print('the new score for kent state is {}'.format(score))
 
+                # close file
                 music_file.close()
+                # Turn lights off
+                GPIO.output(led, GPIO.LOW)
 
             gameCompleted = checkGameCompleted(url, gameId)
 

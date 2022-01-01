@@ -118,7 +118,7 @@ def main():
     device = 'hw:CARD=wm8960soundcard,DEV=0'
     # Open the music file (needs to be .wav format)
     # filename = os.path.join(os.getcwd(), 'BackInBlack.wav')
-    filename = os.path.join('/home', 'pi', 'Desktop', 'Kangaroo-Surfer', 'Iowa_Fight_Song.wav.wav')
+    filename = os.path.join('/home', 'pi', 'Desktop', 'Kangaroo-Surfer', 'Iowa_Fight_Song.wav')
     tada_file = os.path.join('/home', 'pi', 'Desktop', 'Kangaroo-Surfer', 'Tada.wav')
 
     # this is only for college football, no other sports are here

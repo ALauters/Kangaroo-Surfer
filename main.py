@@ -122,7 +122,7 @@ def main():
     tada_file = os.path.join('/home', 'pi', 'Desktop', 'Kangaroo-Surfer', 'Tada.wav')
 
     # this is only for college football, no other sports are here
-    url = 'https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard'
+    url = 'https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?groups=80'
     score = grabScores(url)
     newScore = 0
     gameCompleted = True
